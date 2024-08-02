@@ -79,7 +79,7 @@ class Scanner(val source: String) {
                 } else if (isAlpha(c)) {
                     identifier()
                 } else {
-                    error(line,"Unexpected character: $c")
+                    ErrorHandler.error(line,"Unexpected character: $c")
                 }
             }
 
@@ -104,7 +104,7 @@ class Scanner(val source: String) {
         }
 
         if (isAtEnd()) {
-            error(line, "Unterminated String")
+            ErrorHandler.error(line, "Unterminated String")
             return;
         }
 
