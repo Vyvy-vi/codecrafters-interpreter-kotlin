@@ -17,6 +17,7 @@ fun main(args: Array<String>) {
             val lexer = Scanner(fileContents)
             val tokens = lexer.scanTokens()
             tokens.forEach{token -> println(token)}
+            exitProcess(65)
         }
         else -> {
             System.err.println("Unknown command: ${command}")
