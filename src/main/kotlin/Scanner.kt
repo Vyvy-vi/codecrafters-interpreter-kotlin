@@ -79,7 +79,7 @@ class Scanner(val source: String) {
                 } else if (isAlpha(c)) {
                     identifier()
                 } else {
-                    error(line,"Unexpected Character: $c")
+                    error(line,"Unexpected character: $c")
                 }
             }
 
