@@ -10,16 +10,17 @@ fun main(args: Array<String>) {
     val command = args[0]
     val filename = args[1]
 
-    if (command != "tokenize") {
-        System.err.println("Unknown command: ${command}")
-        exitProcess(1)
-    }
-
     val fileContents = File(filename).readText()
 
-     if (fileContents.isNotEmpty()) {
-         throw NotImplementedError("Scanner not implemented")
-     } else {
-         println("EOF  null") // Placeholder, remove this line when implementing the scanner
-     }
+    when (command) {
+        "tokenize"-> {
+            val lexer = Scanner(fileContents)
+            val tokens = lexer.scanTokens()
+            tokens.forEach{token -> println(token)}
+        }
+        else -> {
+            System.err.println("Unknown command: ${command}")
+            exitProcess(1)
+        }
+    }
 }
