@@ -104,7 +104,7 @@ class Scanner(val source: String) {
         }
 
         if (isAtEnd()) {
-            ErrorHandler.error(line, "Unterminated String.")
+            ErrorHandler.error(line, "Unterminated string.")
             return;
         }
 
