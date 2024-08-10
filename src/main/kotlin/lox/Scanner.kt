@@ -160,11 +160,7 @@ class Scanner(private val source: String) {
         return source[current++]
     }
 
-    private fun addToken(type: TokenType) {
-        addToken(type, null)
-    }
-
-    private fun addToken(type: TokenType, literal: Any?) {
+    private fun addToken(type: TokenType, literal: Any? = null) {
         val text: String = source.substring(start, current)
         tokens.add(Token(type, text, literal, line))
     }

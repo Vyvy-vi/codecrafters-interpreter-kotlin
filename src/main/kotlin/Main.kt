@@ -36,8 +36,6 @@ fun main(args: Array<String>) {
                     Expr.Literal(45.67)
                 )
             )
-
-            println(AstPrinter().print(expression))
         }
 
         "parse" -> {
