@@ -13,11 +13,11 @@ class Parser(private val tokens: List<Token>) {
 
     // equality       → comparison ( ( "!=" | "==" ) comparison )* ;
     private fun equality(): Expr {
-        var expr: Expr = comparision()
+        var expr: Expr = comparison()
 
         while (match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
             val operator: Token = previous()
-            val right: Expr = comparision()
+            val right: Expr = comparison()
             expr = Expr.Binary(expr, operator, right)
         }
 
@@ -25,7 +25,7 @@ class Parser(private val tokens: List<Token>) {
     }
 
     // comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-    private fun comparision(): Expr {
+    private fun comparison(): Expr {
         var expr: Expr = term()
 
         while (match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL)) {
@@ -68,11 +68,21 @@ class Parser(private val tokens: List<Token>) {
 
     // unary          → ( "!" | "-" ) unary | primary
     private fun unary(): Expr {
-        if (match(TokenType.BANG, TokenType.MINUS)) {
-            val operator: Token = previous()
-            val right: Expr = primary()
-            return Expr.Unary(operator, right)
+
+        var operator: Token? = null
+
+        while (match(TokenType.BANG, TokenType.MINUS)) {
+            operator = previous()
         }
+
+        val right: Expr = primary()
+
+        if (operator != null) {
+            return Expr.Unary(operator, unary())
+        } else {
+            return right
+        }
+
         return primary()
     }
 
