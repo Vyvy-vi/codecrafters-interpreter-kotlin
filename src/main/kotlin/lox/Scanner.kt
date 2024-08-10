@@ -1,7 +1,9 @@
-class Scanner(val source: String) {
-    var start: Int = 0
-    var current: Int = 0
-    var line: Int = 1
+package lox
+
+class Scanner(private val source: String) {
+    private var start: Int = 0
+    private var current: Int = 0
+    private var line: Int = 1
 
     private var tokens = mutableListOf<Token>()
 
@@ -30,7 +32,7 @@ class Scanner(val source: String) {
             scanToken()
         }
 
-        tokens.add(Token(TokenType.EOF, "", null, line));
+        tokens.add(Token(TokenType.EOF, "", null, line))
         return tokens
     }
 
@@ -71,7 +73,7 @@ class Scanner(val source: String) {
             '\n' -> line++
 
             // string literals
-            '"'-> string()
+            '"' -> string()
 
             else -> {
                 if (isDigit(c)) {
@@ -79,7 +81,7 @@ class Scanner(val source: String) {
                 } else if (isAlpha(c)) {
                     identifier()
                 } else {
-                    ErrorHandler.error(line,"Unexpected character: $c")
+                    ErrorHandler.error(line, "Unexpected character: $c")
                 }
             }
 
@@ -89,6 +91,7 @@ class Scanner(val source: String) {
     private fun isAlpha(c: Char): Boolean {
         return ((c in 'a'..'z') || (c in 'A'..'Z') || (c == '_'))
     }
+
     private fun isDigit(c: Char): Boolean {
         return c in '0'..'9'
     }
@@ -99,13 +102,13 @@ class Scanner(val source: String) {
 
     private fun string() {
         while (peek() != '"' && !isAtEnd()) {
-            if (peek() == '\n') line++;
+            if (peek() == '\n') line++
             advance()
         }
 
         if (isAtEnd()) {
             ErrorHandler.error(line, "Unterminated string.")
-            return;
+            return
         }
 
         advance()
@@ -146,11 +149,11 @@ class Scanner(val source: String) {
 
     // lookahead
     private fun match(expected: Char): Boolean {
-        if (isAtEnd()) return false;
-        if (source[current] != expected) return false;
+        if (isAtEnd()) return false
+        if (source[current] != expected) return false
 
-        current++;
-        return true;
+        current++
+        return true
     }
 
     private fun advance(): Char {
@@ -162,8 +165,8 @@ class Scanner(val source: String) {
     }
 
     private fun addToken(type: TokenType, literal: Any?) {
-        var text: String = source.substring(start, current);
-        tokens.add(Token(type, text, literal, line));
+        val text: String = source.substring(start, current)
+        tokens.add(Token(type, text, literal, line))
     }
 
 }

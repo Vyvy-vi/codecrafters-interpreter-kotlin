@@ -1,3 +1,5 @@
+package lox
+
 enum class TokenType {
 
 	// single character tokens
