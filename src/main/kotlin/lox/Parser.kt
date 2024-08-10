@@ -75,15 +75,11 @@ class Parser(private val tokens: List<Token>) {
             operator = previous()
         }
 
-        val right: Expr = primary()
-
         if (operator != null) {
             return Expr.Unary(operator, unary())
         } else {
-            return right
+            return primary()
         }
-
-        return primary()
     }
 
     // primary        → NUMBER | STRING | "true" | "false" | "nil"
