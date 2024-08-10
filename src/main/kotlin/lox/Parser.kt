@@ -68,18 +68,12 @@ class Parser(private val tokens: List<Token>) {
 
     // unary          → ( "!" | "-" ) unary | primary
     private fun unary(): Expr {
-
-        var operator: Token? = null
-
-        while (match(TokenType.BANG, TokenType.MINUS)) {
-            operator = previous()
+        if(match(TokenType.BANG, TokenType.MINUS)){
+            val operator = previous()
+            val right = unary()
+            return Expr.Unary(operator, right)
         }
-
-        if (operator != null) {
-            return Expr.Unary(operator, unary())
-        } else {
-            return primary()
-        }
+        return primary()
     }
 
     // primary        → NUMBER | STRING | "true" | "false" | "nil"
