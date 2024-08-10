@@ -19,9 +19,8 @@ fun main(args: Array<String>) {
             val scanner = Scanner(fileContents)
             val tokens = scanner.scanTokens()
 
-            if (ErrorHandler.hadError) exitProcess(65)
-
             tokens.forEach { token -> println(token) }
+            if (ErrorHandler.hadError) exitProcess(65)
         }
 
         "generateAst" -> {
