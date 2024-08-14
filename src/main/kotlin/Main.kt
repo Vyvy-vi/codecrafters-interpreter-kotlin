@@ -6,7 +6,7 @@ import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     if (args.size < 2) {
-        System.err.println("Usage: ./your_program.sh tokenize <filename>")
+        System.err.println("Usage: ./your_program.sh [commmand] <filename>")
         exitProcess(1)
     }
 
@@ -48,6 +48,18 @@ fun main(args: Array<String>) {
             if (ErrorHandler.hadError || expression == null) exitProcess(65)
 
             println(AstPrinter().print(expression))
+        }
+
+        "evaluate" -> {
+            val fileContents = File(filename).readText()
+            val scanner = Scanner(fileContents)
+            val tokens = scanner.scanTokens()
+
+            val parser = Parser(tokens)
+            val expression: Expr? = parser.parse()
+            if (ErrorHandler.hadError || expression == null) exitProcess(65)
+
+
         }
 
         else -> {
