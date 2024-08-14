@@ -1,5 +1,4 @@
 import lox.*
-import lox.ErrorHandler
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -20,7 +19,6 @@ fun main(args: Array<String>) {
             val tokens = scanner.scanTokens()
 
             tokens.forEach { token -> println(token) }
-            if (ErrorHandler.hadError) exitProcess(65)
         }
 
         "generateAst" -> {
@@ -45,7 +43,7 @@ fun main(args: Array<String>) {
             val parser = Parser(tokens)
             val expression: Expr? = parser.parse()
 
-            if (ErrorHandler.hadError || expression == null) exitProcess(65)
+            if (Lox.hadError || expression == null) exitProcess(65)
 
             println(AstPrinter().print(expression))
         }
@@ -57,14 +55,19 @@ fun main(args: Array<String>) {
 
             val parser = Parser(tokens)
             val expression: Expr? = parser.parse()
-            if (ErrorHandler.hadError || expression == null) exitProcess(65)
-
-
+            try {
+                if (expression != null)
+                    Lox.interpreter.interpret(expression)
+            } catch (e: Exception) {
+                System.err.println(e.message)
+                exitProcess(65)
+            }
         }
-
         else -> {
             System.err.println("Unknown command: $command")
             exitProcess(1)
         }
     }
+    if (Lox.hadError) exitProcess(65)
+    if (Lox.hadRuntimeError) System.exit(70);
 }

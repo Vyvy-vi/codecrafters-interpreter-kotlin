@@ -1,7 +1,10 @@
 package lox
 
-object ErrorHandler {
-    var hadError = false;
+object Lox {
+    var hadError = false
+    var hadRuntimeError = false
+    val interpreter = Interpreter()
+
     fun error(line: Int, message: String) {
         report(line, "", message)
     }
@@ -17,5 +20,10 @@ object ErrorHandler {
         } else {
             report(token.line, " at '" + token.lexeme + "'", message);
         }
+    }
+
+    fun runtimeError(error: RuntimeError) {
+        System.err.println(error.message + "\n[line${error.token.line}]")
+        hadRuntimeError = true
     }
 }

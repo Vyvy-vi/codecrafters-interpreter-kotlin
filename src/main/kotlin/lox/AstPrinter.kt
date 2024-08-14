@@ -8,11 +8,11 @@ class AstPrinter: Expr.Visitor<String> {
     }
 
     override fun visitUnaryExpr(expr: Expr.Unary): String {
-        return paranethisize(expr.operator.lexeme, expr.right)
+        return paranthisize(expr.operator.lexeme, expr.right)
     }
 
     override fun visitBinaryExpr(expr: Expr.Binary): String {
-        return paranethisize(expr.operator.lexeme, expr.left, expr.right)
+        return paranthisize(expr.operator.lexeme, expr.left, expr.right)
     }
 
     override fun visitLiteralExpr(expr: Expr.Literal): String {
@@ -22,10 +22,10 @@ class AstPrinter: Expr.Visitor<String> {
     }
 
     override fun visitGroupingExpr(expr: Expr.Grouping): String {
-        return paranethisize("group", expr.expression)
+        return paranthisize("group", expr.expression)
     }
 
-    fun paranethisize(name: String, vararg exprs: Expr): String {
+    fun paranthisize(name: String, vararg exprs: Expr): String {
         var builder: StringBuilder = StringBuilder()
         builder.append("(").append(name)
 
