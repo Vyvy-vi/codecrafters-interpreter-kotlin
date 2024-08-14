@@ -73,6 +73,7 @@ class Interpreter : Expr.Visitor<Any?> {
     }
 
     override fun visitLiteralExpr(expr: Expr.Literal): Any? {
+        if (expr.value == null) return "nil"
         return expr.value
     }
 
