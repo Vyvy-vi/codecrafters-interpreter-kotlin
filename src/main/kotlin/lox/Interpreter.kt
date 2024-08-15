@@ -112,7 +112,6 @@ class Interpreter : Expr.Visitor<Any?> {
 
         if (obj is Double) {
             val text = obj.toString()
-            println("-$text")
 
             if (text.endsWith(".0")) {
                 text.substring(0, text.length - 2)
@@ -137,7 +136,7 @@ class Interpreter : Expr.Visitor<Any?> {
     fun interpret(expression: Expr) {
         try {
             val value: Any? = evaluate(expression)
-            println(value.toString())
+            println(stringify(value))
         } catch (error: RuntimeError) {
             Lox.runtimeError(error)
         }
