@@ -73,7 +73,6 @@ class Interpreter : Expr.Visitor<Any?> {
     }
 
     override fun visitLiteralExpr(expr: Expr.Literal): Any? {
-        if (expr.value == null) return "nil"
         return expr.value
     }
 
@@ -97,7 +96,7 @@ class Interpreter : Expr.Visitor<Any?> {
 
     private fun isTruthy(obj: Any?): Boolean {
         if (obj == null) return false;
-        return if (obj is Boolean) obj else true
+        return if (obj is Boolean) (obj as Boolean) else true
     }
 
     private fun isEqual(left: Any?, right: Any?): Boolean {
@@ -109,7 +108,6 @@ class Interpreter : Expr.Visitor<Any?> {
 
     private fun stringify(obj: Any?): String  {
         if (obj == null) return "nil"
-
         if (obj is Double) {
             var text = obj.toString()
 
