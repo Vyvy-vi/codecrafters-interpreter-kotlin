@@ -60,7 +60,7 @@ class Interpreter : Expr.Visitor<Any?> {
 
             // equality
             TokenType.BANG_EQUAL -> return !isEqual(left, right)
-            TokenType.EQUAL_EQUAL -> return !isEqual(left, right)
+            TokenType.EQUAL_EQUAL -> return isEqual(left, right)
 
             else -> null
         }
