@@ -112,6 +112,7 @@ class Interpreter : Expr.Visitor<Any?> {
 
         if (obj is Double) {
             val text = obj.toString()
+            println("-$text")
 
             if (text.endsWith(".0")) {
                 text.substring(0, text.length - 2)
