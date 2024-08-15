@@ -12,34 +12,20 @@ fun main(args: Array<String>) {
     val command = args[0]
     val filename = args[1]
 
+    val fileContents = File(filename).readText()
+    val scanner = Scanner(fileContents)
+    val tokens = scanner.scanTokens()
+
     when (command) {
         "tokenize" -> {
-            val fileContents = File(filename).readText()
-            val scanner = Scanner(fileContents)
-            val tokens = scanner.scanTokens()
-
             tokens.forEach { token -> println(token) }
         }
 
         "generateAst" -> {
             tools.main(arrayOf("src/main/kotlin/lox"))
-            val expression: Expr = Expr.Binary(
-                Expr.Unary(
-                    Token(TokenType.MINUS, "-", null, 1),
-                    Expr.Literal(123)
-                ),
-                Token(TokenType.STAR, "*", null, 1),
-                Expr.Grouping(
-                    Expr.Literal(45.67)
-                )
-            )
         }
 
         "parse" -> {
-            val fileContents = File(filename).readText()
-            val scanner = Scanner(fileContents)
-            val tokens = scanner.scanTokens()
-
             val parser = Parser(tokens)
             val expression: Expr? = parser.parse()
 
@@ -49,10 +35,6 @@ fun main(args: Array<String>) {
         }
 
         "evaluate" -> {
-            val fileContents = File(filename).readText()
-            val scanner = Scanner(fileContents)
-            val tokens = scanner.scanTokens()
-
             val parser = Parser(tokens)
             val expression: Expr? = parser.parse()
             try {
