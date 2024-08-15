@@ -111,10 +111,10 @@ class Interpreter : Expr.Visitor<Any?> {
         if (obj == null) return "nil"
 
         if (obj is Double) {
-            val text = obj.toString()
+            var text = obj.toString()
 
             if (text.endsWith(".0")) {
-                text.substring(0, text.length - 2)
+                text = text.substring(0, text.length - 2)
             }
 
             return text
