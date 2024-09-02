@@ -51,6 +51,9 @@ fun main(args: Array<String>) {
             val statements: List<Stmt> = parser.parse()
             try {
                 Lox.interpreter.interpret(statements)
+                if (Lox.hadRuntimeError) {
+                    exitProcess(65)
+                }
             } catch (e: Exception) {
                 System.err.println(e.message)
                 exitProcess(65)
