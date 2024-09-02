@@ -35,6 +35,18 @@ fun main(args: Array<String>) {
         }
 
         "evaluate" -> {
+//            val parser = Parser(tokens)
+//            val expression: Expr? = parser.parse()
+//            try {
+//                if (expression != null)
+//                    Lox.interpreter.interpret(expression)
+//            } catch (e: Exception) {
+//                System.err.println(e.message)
+//                exitProcess(65)
+//            }
+        }
+
+        "run" -> {
             val parser = Parser(tokens)
             val statements: List<Stmt> = parser.parse()
             try {
@@ -44,6 +56,7 @@ fun main(args: Array<String>) {
                 exitProcess(65)
             }
         }
+
         else -> {
             System.err.println("Unknown command: $command")
             exitProcess(1)
