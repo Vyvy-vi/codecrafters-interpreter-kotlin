@@ -26,20 +26,19 @@ fun main(args: Array<String>) {
         }
 
         "parse" -> {
-            val parser = Parser(tokens)
-            val expression: Expr? = parser.parse()
-
-            if (Lox.hadError || expression == null) exitProcess(65)
-
-            println(AstPrinter().print(expression))
+//            val parser = Parser(tokens)
+//            val expression: Expr? = parser.parse()
+//
+//            if (Lox.hadError || expression == null) exitProcess(65)
+//
+//            println(AstPrinter().print(expression))
         }
 
         "evaluate" -> {
             val parser = Parser(tokens)
-            val expression: Expr? = parser.parse()
+            val statements: List<Stmt> = parser.parse()
             try {
-                if (expression != null)
-                    Lox.interpreter.interpret(expression)
+                Lox.interpreter.interpret(statements)
             } catch (e: Exception) {
                 System.err.println(e.message)
                 exitProcess(65)

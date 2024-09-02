@@ -6,8 +6,31 @@ class Parser(private val tokens: List<Token>) {
 
     private var current: Int = 0
 
+
+    // statement      → exprStmt | printStmt ;
+    private fun statement(): Stmt {
+        if (match(TokenType.PRINT)) return printStatement()
+        return expressionStatement()
+    }
+
+    // printStmt      → "print" expression ";" ;
+    private fun printStatement(): Stmt {
+        val value: Expr = expression();
+        consume(TokenType.SEMICOLON, "Expect ';' after value.")
+        return Stmt.Print(value);
+    }
+
+    //exprStmt       → expression ";" ;
+    private fun expressionStatement(): Stmt {
+        val expr: Expr = expression();
+        consume(TokenType.SEMICOLON, "Expect ';' after expression.")
+        return Stmt.Expression(expr);
+    }
+
+
+
     // expression     → equality ;
-    private fun expression() : Expr {
+    private fun expression(): Expr {
         return equality()
     }
 
@@ -68,7 +91,7 @@ class Parser(private val tokens: List<Token>) {
 
     // unary          → ( "!" | "-" ) unary | primary
     private fun unary(): Expr {
-        if(match(TokenType.BANG, TokenType.MINUS)){
+        if (match(TokenType.BANG, TokenType.MINUS)) {
             val operator = previous()
             val right = unary()
             return Expr.Unary(operator, right)
@@ -121,7 +144,7 @@ class Parser(private val tokens: List<Token>) {
         return peek().type == type
     }
 
-    private fun advance() : Token {
+    private fun advance(): Token {
         if (!isAtEnd()) current++
         return previous()
     }
@@ -153,20 +176,19 @@ class Parser(private val tokens: List<Token>) {
                 TokenType.CLASS, TokenType.FUN, TokenType.VAR,
                 TokenType.FOR, TokenType.IF, TokenType.WHILE,
                 TokenType.PRINT, TokenType.RETURN -> return
+
                 else ->
                     advance()
             }
         }
     }
 
-    fun parse(): Expr? {
-        try {
-            return expression()
-        } catch (error: ParseError) {
-            return null
+    fun parse(): List<Stmt> {
+        val statements = mutableListOf<Stmt>();
+        while (!isAtEnd()) {
+            statements.add(statement())
         }
+        return statements;
     }
-
-
 
 }

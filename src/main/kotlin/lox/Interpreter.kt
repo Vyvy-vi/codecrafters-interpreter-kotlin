@@ -5,7 +5,7 @@ import java.beans.Expression
 import java.lang.RuntimeException
 import kotlin.math.exp
 
-class Interpreter : Expr.Visitor<Any?> {
+class Interpreter : Expr.Visitor<Any?>, Stmt.Visitor<Unit> {
     override fun visitBinaryExpr(expr: Expr.Binary): Any? {
         val left = evaluate(expr.left)
         val right = evaluate(expr.right)
@@ -94,6 +94,15 @@ class Interpreter : Expr.Visitor<Any?> {
         return expr.accept(this)
     }
 
+    override fun visitExpressionStmt(stmt: Stmt.Expression) {
+        evaluate(stmt.expression);
+    }
+
+    override fun visitPrintStmt(stmt: Stmt.Print) {
+        val value = evaluate(stmt.expression)
+        println(stringify(value))
+    }
+
     private fun isTruthy(obj: Any?): Boolean {
         if (obj == null) return false;
         return if (obj is Boolean) (obj as Boolean) else true
@@ -131,12 +140,17 @@ class Interpreter : Expr.Visitor<Any?> {
         throw RuntimeError(operator, "Operands must be numbers.")
     }
 
-    fun interpret(expression: Expr) {
+    fun interpret(statements: List<Stmt>) {
         try {
-            val value: Any? = evaluate(expression)
-            println(stringify(value))
+            for (statement: Stmt in statements) {
+                execute(statement)
+            }
         } catch (error: RuntimeError) {
             Lox.runtimeError(error)
         }
+    }
+
+    private fun execute(stmt: Stmt) {
+        stmt.accept(this)
     }
 }

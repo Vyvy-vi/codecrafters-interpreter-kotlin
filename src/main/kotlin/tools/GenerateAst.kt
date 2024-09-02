@@ -83,4 +83,9 @@ fun main(args: Array<String>) {
         )
     )
 
+    defineAst(outputDir, "Stmt", listOf(
+        "Expression  : Expr expression",
+        "Print       : Expr expression"
+    ))
+
 }
