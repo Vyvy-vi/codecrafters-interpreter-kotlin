@@ -4,6 +4,34 @@ import kotlin.system.exitProcess
 
 
 fun main(args: Array<String>) {
+
+    if (args.size == 0) {
+        print("> ")
+        var input = readlnOrNull()
+        while (input != null && input != "quit") {
+            val scanner = Scanner(input)
+            val tokens = scanner.scanTokens()
+            val parser = Parser(tokens)
+            val statements: List<Stmt> = parser.parse()
+
+            try {
+                Lox.interpreter.interpret(statements)
+            } catch (e: Exception) {
+                System.err.println(e.message)
+                exitProcess(65)
+            }
+
+            print("> ")
+            System.out.flush()
+            input = readlnOrNull()
+        }
+    }
+
+    if (args[0] == "generateAst") {
+        tools.main(arrayOf("src/main/kotlin/lox"))
+        exitProcess(0)
+    }
+
     if (args.size < 2) {
         System.err.println("Usage: ./your_program.sh [commmand] <filename>")
         exitProcess(1)
@@ -19,10 +47,6 @@ fun main(args: Array<String>) {
     when (command) {
         "tokenize" -> {
             tokens.forEach { token -> println(token) }
-        }
-
-        "generateAst" -> {
-            tools.main(arrayOf("src/main/kotlin/lox"))
         }
 
         "parse" -> {
@@ -48,17 +72,15 @@ fun main(args: Array<String>) {
 
         "run" -> {
             val parser = Parser(tokens)
-            val statements: List<Stmt> = parser.parse()
+
             try {
+                val statements: List<Stmt> = parser.parse()
                 Lox.interpreter.interpret(statements)
-                if (Lox.hadRuntimeError) {
-                    exitProcess(65)
-                }
             } catch (e: Exception) {
-                System.err.println(e.message)
                 exitProcess(65)
             }
         }
+
 
         else -> {
             System.err.println("Unknown command: $command")
